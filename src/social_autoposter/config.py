@@ -35,6 +35,7 @@ class Settings:
     linkedin_author_urn: str
     linkedin_version: str
     discord_webhook_url: str
+    discord_notify_all_runs: bool
 
     @classmethod
     def from_environment(cls) -> "Settings":
@@ -60,4 +61,5 @@ class Settings:
             linkedin_author_urn=os.getenv("LINKEDIN_AUTHOR_URN", "").strip(),
             linkedin_version=os.getenv("LINKEDIN_VERSION", "202607").strip() or "202607",
             discord_webhook_url=os.getenv("DISCORD_WEBHOOK_URL", "").strip(),
+            discord_notify_all_runs=os.getenv("DISCORD_NOTIFY_ALL_RUNS", "true").strip().lower() not in {"0", "false", "no"},
         )

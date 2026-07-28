@@ -9,13 +9,20 @@ from .models import RunSummary
 logger = logging.getLogger(__name__)
 
 
-def notify_discord(webhook_url: str, summary: RunSummary) -> bool:
-    """Send a compact failure alert. A notification failure never aborts posting."""
-    if not webhook_url or not summary.failures:
+def notify_discord(webhook_url: str, summary: RunSummary, *, notify_all_runs: bool = True) -> bool:
+    """Send a compact run summary. A notification failure never aborts posting."""
+    if not webhook_url or (not notify_all_runs and not summary.failures):
         return True
-    lines = [f"Social auto-poster failure: {len(summary.failures)} platform failure(s)"]
-    for result in summary.failures:
-        lines.append(f"- {result.platform}: {result.error or 'unknown error'}")
+    if not summary.results:
+        lines = ["Social auto-poster: run complete — no queued posts were due."]
+    else:
+        succeeded = sum(1 for result in summary.results if result.success)
+        failed = len(summary.failures)
+        lines = [f"Social auto-poster: run complete — {succeeded} succeeded, {failed} failed."]
+        for result in summary.results:
+            status = "OK" if result.success else "FAIL"
+            detail = result.post_id or result.error or "no details"
+            lines.append(f"- {status} {result.platform}: {detail}")
     try:
         response = requests.post(webhook_url, json={"content": "\n".join(lines)[:1900]}, timeout=15)
         response.raise_for_status()

@@ -35,4 +35,5 @@ jobs:
           MASTODON_BASE_URL: ${{ secrets.MASTODON_BASE_URL }}
           MASTODON_ACCESS_TOKEN: ${{ secrets.MASTODON_ACCESS_TOKEN }}
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          DISCORD_NOTIFY_ALL_RUNS: ${{ secrets.DISCORD_NOTIFY_ALL_RUNS }}
         run: social-auto-poster --live
