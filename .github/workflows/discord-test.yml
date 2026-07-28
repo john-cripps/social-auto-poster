@@ -1,0 +1,32 @@
+name: Test Discord notification
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send test message
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          python - <<'PY'
+          import json, os, urllib.request
+          url = os.environ.get("DISCORD_WEBHOOK_URL", "")
+          if not url:
+              raise SystemExit("DISCORD_WEBHOOK_URL is not configured")
+          request = urllib.request.Request(
+              url,
+              data=json.dumps({"content": "✅ GitHub Actions Discord test: webhook secret is working."}).encode(),
+              headers={"Content-Type": "application/json"},
+              method="POST",
+          )
+          with urllib.request.urlopen(request, timeout=15) as response:
+              if response.status >= 300:
+                  raise SystemExit(f"Discord returned HTTP {response.status}")
+          print("Discord webhook test succeeded")
+          PY
