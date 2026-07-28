@@ -22,7 +22,10 @@ jobs:
           request = urllib.request.Request(
               url,
               data=json.dumps({"content": "✅ GitHub Actions Discord test: webhook secret is working."}).encode(),
-              headers={"Content-Type": "application/json"},
+              headers={
+                  "Content-Type": "application/json",
+                  "User-Agent": "social-auto-poster/1.0 (https://github.com/john-cripps/social-auto-poster)",
+              },
               method="POST",
           )
           try:
