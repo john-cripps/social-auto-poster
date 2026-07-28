@@ -15,7 +15,7 @@ jobs:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: |
           python - <<'PY'
-          import json, os, urllib.request
+          import json, os, urllib.error, urllib.request
           url = os.environ.get("DISCORD_WEBHOOK_URL", "")
           if not url:
               raise SystemExit("DISCORD_WEBHOOK_URL is not configured")
@@ -25,8 +25,16 @@ jobs:
               headers={"Content-Type": "application/json"},
               method="POST",
           )
-          with urllib.request.urlopen(request, timeout=15) as response:
-              if response.status >= 300:
-                  raise SystemExit(f"Discord returned HTTP {response.status}")
+          try:
+              with urllib.request.urlopen(request, timeout=15) as response:
+                  if response.status >= 300:
+                      raise SystemExit(f"Discord returned HTTP {response.status}")
+          except urllib.error.HTTPError as error:
+              detail = error.read().decode("utf-8", errors="replace")[:300]
+              print(f"Discord returned HTTP {error.code}: {detail}")
+              raise
+          except urllib.error.URLError as error:
+              print(f"Discord connection failed: {error.reason}")
+              raise
           print("Discord webhook test succeeded")
           PY
