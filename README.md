@@ -1,6 +1,6 @@
 # Social Auto-Poster
 
-The current milestone contains the platform-independent Python runner, Google Sheets reader, shared adapter interface, Bluesky and Mastodon adapters, and GitHub Actions workflows.
+The current milestone contains the platform-independent Python runner, Google Sheets reader, shared adapter interface, Bluesky and Mastodon adapters, Discord failure alerts, and GitHub Actions workflows.
 
 ## Safety defaults
 

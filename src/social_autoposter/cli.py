@@ -9,6 +9,7 @@ from .adapters.linkedin import LinkedInAdapter
 from .config import Settings
 from .runner import run
 from .sheets import SheetClient
+from .notifications import notify_discord
 
 
 def main() -> int:
@@ -25,6 +26,7 @@ def main() -> int:
     adapters["mastodon"] = MastodonAdapter(settings.mastodon_base_url, settings.mastodon_access_token, dry_run=dry_run)
     adapters["linkedin"] = LinkedInAdapter(client_id=settings.linkedin_client_id, client_secret=settings.linkedin_client_secret, access_token=settings.linkedin_access_token, refresh_token=settings.linkedin_refresh_token, access_token_expires_at=settings.linkedin_access_token_expires_at, author_urn=settings.linkedin_author_urn, version=settings.linkedin_version, dry_run=dry_run)
     summary = run(sheet, adapters, live=args.live)
+    notify_discord(settings.discord_webhook_url, summary)
     logging.info("run_complete total=%s failures=%s", len(summary.results), len(summary.failures))
     return 1 if summary.failures else 0
 

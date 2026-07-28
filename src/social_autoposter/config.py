@@ -34,6 +34,7 @@ class Settings:
     linkedin_access_token_expires_at: int
     linkedin_author_urn: str
     linkedin_version: str
+    discord_webhook_url: str
 
     @classmethod
     def from_environment(cls) -> "Settings":
@@ -58,4 +59,5 @@ class Settings:
             linkedin_access_token_expires_at=int(os.getenv("LINKEDIN_ACCESS_TOKEN_EXPIRES_AT", "0") or 0),
             linkedin_author_urn=os.getenv("LINKEDIN_AUTHOR_URN", "").strip(),
             linkedin_version=os.getenv("LINKEDIN_VERSION", "202607").strip() or "202607",
+            discord_webhook_url=os.getenv("DISCORD_WEBHOOK_URL", "").strip(),
         )
