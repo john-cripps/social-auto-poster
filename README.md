@@ -31,7 +31,9 @@ social-auto-poster --dry-run
 
 The command also loads `.env` automatically; the explicit `source` lines are useful when running other local commands that need the same variables.
 
-LinkedIn and Meta adapters are deferred until the required accounts are available. Mac Mini launchd/Docker files, setup guide, verification script, and Discord notification are still deferred.
+LinkedIn and Meta adapters are deferred until the required accounts are available. Discord notification is still deferred.
+
+See [`SETUP.md`](SETUP.md) for credential verification and the later Mac Mini migration checklist.
 
 ## GitHub Actions
 

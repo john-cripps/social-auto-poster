@@ -1,0 +1,8 @@
+# Currently unused: GitHub Actions is the active runner.
+# Use this later on the Mac Mini after setting up a local .env file.
+services:
+  social-auto-poster:
+    build: .
+    env_file: .env
+    command: ["social-auto-poster", "--live"]
+    restart: unless-stopped
